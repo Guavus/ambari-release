@@ -54,6 +54,14 @@
   </issueManagement>
 
   <repositories>
+<repository>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+          <id>central</id>
+          <name>libs-release</name>
+          <url>http://artifacts.ggn.in.guavus.com:8081/artifactory/libs-release</url>
+        </repository>
     <repository>
       <id>apache-hadoop</id>
       <name>hdp</name>
