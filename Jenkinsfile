@@ -23,7 +23,7 @@ pipeline {
   environment {
     // Define global environment variables in this section
     SLACK_CHANNEL = 'jenkins-misc-alerts'
-    ARCHIVE_PATH = "target/dists/rpm/*.rpm"
+    ARCHIVE_PATH = "rpms/*.rpm"
     SONAR_PATH = './'
 
  
