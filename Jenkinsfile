@@ -18,7 +18,8 @@
 
 @Library('jenkins_lib')_
 pipeline {
-    agent any
+    agent {label 'jenkins-slave01'}
+
 
   environment {
     // Define global environment variables in this section
@@ -38,10 +39,17 @@ pipeline {
       }
     }
     stage("Compile, Build and Test") {
+        agent {
+                    docker { image 'artifacts.ggn.in.guavus.com:4244/ambari-buildbox:jenkins_slave1'
+                             args " -v /etc/passwd:/etc/passwd -v /etc/group:/etc/group -u ${USER} -v ${HOME}:${HOME} -v ${HOME}/.m2:${HOME}/.m2:cached -e HOME=$HOME"
+                             reuseNode true
+                    }
+              }
+
       steps {
       script {
         echo "Running Build and Test"
-        sh 'sh start-build-env.sh'
+         sh  'echo $HOME && mvn help:evaluate -Dexpression=settings.localRepository'
         sh 'mvn -B clean install rpm:rpm -DnewVersion=2.7.3.0.0 -DbuildNumber=4295bb16c439cbc8fb0e7362f19768dde1477868 -DskipTests -Dpython.ver="python >= 2.6"'
              }
       }
@@ -58,7 +66,8 @@ stage("RPM Collect"){
     steps {
       script {
           sh "mkdir rpms"
-          sh "find ./ -name *.rpm -exec cp -n {} rpms/ ||true"
+          sh "find ./ -name *.rpm -exec cp -n {} rpms/ \\;||true"
+
       }
     }
     }
